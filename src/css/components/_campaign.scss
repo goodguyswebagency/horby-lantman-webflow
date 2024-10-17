@@ -1,0 +1,21 @@
+/* Default style for the blocks */
+.campaign__block {
+  grid-column: span 3 / span 3; /* Default is to span 3 columns */
+}
+
+/* If there are 2 elements */
+.campaign__wrapper:has(.campaign__block:nth-child(2)) .campaign__block {
+  grid-column: span 6 / span 6 !important; /* Both elements span 6 columns */
+}
+
+/* If there are 3 elements */
+.campaign__wrapper:has(.campaign__block:nth-child(3)) .campaign__block:nth-child(1) {
+  grid-column: span 6 / span 6 !important; /* First element spans 6 columns */
+}
+
+.campaign__wrapper:has(.campaign__block:nth-child(3)) .campaign__block:nth-child(2),
+.campaign__wrapper:has(.campaign__block:nth-child(3)) .campaign__block:nth-child(3) {
+  grid-column: span 3 / span 3 !important; /* Second and third elements span 3 columns */
+}
+
+/* If there are 4 elements (default, they all span 3 columns) */

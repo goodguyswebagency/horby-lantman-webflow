@@ -1,0 +1,14 @@
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 2rem)); /* match 1 rem to gap above */
+  }
+}
+
+.scroll {
+  animation: scroll 10s linear infinite;
+  will-change: transform; 
+}

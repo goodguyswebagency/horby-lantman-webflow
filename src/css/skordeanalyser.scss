@@ -1,0 +1,7 @@
+.skor-harvest__table__row:last-of-type{
+  border-bottom: 0px;
+}
+
+.w-dyn-items .skor-harvest__table__row:nth-child(odd){
+  background-color: rgba(35, 167, 63, 0.10);
+}

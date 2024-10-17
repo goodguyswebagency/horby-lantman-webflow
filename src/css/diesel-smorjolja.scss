@@ -1,0 +1,46 @@
+
+@keyframes logomarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 6.25rem)); /* match 6.25rem to gap of the parent */
+  }
+}
+@media screen and (max-width: 767px) {
+  @keyframes logomarquee {
+    to {
+      transform: translateX(calc(-100% - 5rem)); /* Adjusted for smaller screens */
+    }
+  }
+}
+
+.logomarquee {
+  animation: logomarquee 10s linear infinite;
+  will-change: transform; 
+}
+
+.diesel-hero__marquee{
+  position: relative;
+  &:before,
+  &:after{
+    position: absolute;
+    content: '';
+    top: 0px;
+    height: 100%;
+    width: 9.9375rem;
+    z-index: 10;
+    @media screen and (max-width: 991px){
+      display: none;
+    }
+  }
+  &:before{
+    left: 0px;
+    background: linear-gradient(270deg, rgba(248, 245, 240, 0.00) 0%, #F8F5F0 86.48%);
+  }
+  &:after{
+    transform: rotate(180deg);
+    right: 0px;
+    background: linear-gradient(270deg, rgba(248, 245, 240, 0.00) 0%, #F8F5F0 86.48%);
+  }
+}

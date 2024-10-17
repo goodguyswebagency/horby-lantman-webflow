@@ -1,0 +1,73 @@
+.button{
+  .button-arrow path{
+    fill: var(--color--text-white);
+  }
+  &:hover{
+    .button-arrow{
+      transform: rotate(45deg);
+    }
+  }
+
+  &[data-background="transparent"]{
+    padding: 0px 1.88rem 0px 0px;
+    color: var(--color--text-black);
+    border: 0px;
+    background-color: transparent;
+
+    .button-arrow{
+      transform: rotate(45deg);
+      margin-right: 0.25rem;
+      path{
+        fill: var(--color--text-black);
+      }
+    }
+
+    &:hover{
+      .button-arrow{
+        margin-right: 0rem;
+      }
+    }
+  }
+
+  &[data-background="white"]{
+    color: var(--color--text-black);
+    border-color: #A3A3A3;
+    background-color: var(--color--text-white);
+
+    .button-arrow{
+      path{
+        fill: var(--color--text-black);
+      }
+    }
+
+    &:hover{
+      color: var(--color--text-white);
+      .button-arrow{
+        path{
+          fill: var(--color--text-white);
+        }
+      }
+      .button-overlay{
+        opacity: 1;
+        left: -1.1875rem;
+        top: -1.25rem;
+        width: 140%;
+        height: 200%;
+      }
+    }
+    
+  }
+
+  &[data-background="green"]{
+    background-color: #23A73F;
+    border-color: #23A73F;
+  }
+
+  &[data-reverse-colors="true"]{
+    --swatch--black: #fff;
+    --swatch--white: #191919;
+    --color--text-white: var(--swatch--white);
+    --color--text-black: var(--swatch--black);
+  }
+}
+

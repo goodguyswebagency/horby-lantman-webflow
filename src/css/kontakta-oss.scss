@@ -1,0 +1,14 @@
+
+
+.kontakta-faq__accordion__block__answer{
+   transition: max-height 0.25s ease-in;
+}
+
+.kontakta-faq__accordion__block__question.open + .kontakta-faq__accordion__block__answer{
+  max-height: 200px;
+}
+
+.open .kontakta-faq-arrow{
+  transform: rotate(90deg);
+}
+

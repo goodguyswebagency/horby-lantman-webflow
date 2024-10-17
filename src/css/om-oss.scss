@@ -1,0 +1,42 @@
+
+.oss-history__slider-main{
+  .swiper-button-disabled{
+    opacity: .5;
+  }
+  
+  .swiper-slide-active{
+    h3{
+      color: #191919;
+    }
+  }
+}
+
+.pagination-controls{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.pagination-button{
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  background-color: transparent;
+  border: 1px solid black;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  &.active{
+    background-color: #000;
+    color: #fff;
+  }
+}
+
+.fade-in {
+  opacity: 0; /* Start as transparent */
+  transition: opacity 0.3s ease; /* Transition for fade-in effect */
+}
+
+.fade-in.show {
+  opacity: 1; /* Fully visible when the class 'show' is added */
+}

@@ -1,0 +1,131 @@
+.nav__wrapper{
+  @media screen and (max-width: 1065px){
+    grid-column-gap: 1rem;
+  }
+  .brand {
+    @media screen and (max-width: 1065px){
+      width: 8.125rem;
+    }
+    @media screen and (max-width: 991px){
+      width: 9.125rem;
+    }
+    @media screen and (max-width: 767px){
+      width: 6.5rem;
+    }
+  }
+}
+
+.dropdown-open{
+  .nav__menu__dropdown__content{
+    max-height: 700px;
+  }
+  .nav__dropdown__block:hover{
+    @media screen and (min-width: 992px){
+      .nav__dropdown__block__media-image{
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  // this element is to fill the gap between the hover dropdown link and the dropdown content
+  // so the dropdown wont close when we hover out of the dropdown trigger area
+  // since the content of the dropdown is bellow
+  &:before{
+    position: absolute;
+    bottom: -1.2rem;
+    content: "";
+    height: 2.2rem;
+    width: 70%;
+    left: 10%;
+    @media screen and (max-width: 991px){
+      display: none;
+    }
+  }
+
+  .nav__menu__dropdown-icon-line-vertical{
+    transform: rotate(90deg);
+  }
+}
+
+.nav__overlay.active-overlay{
+  display: block;
+  opacity: 1;
+  @media screen and (max-width: 991px){
+    display: none;
+  }
+}
+
+.w-nav-overlay{
+  top: 0%;
+  background-color: #f8f5f0;
+  @media screen and (max-width: 991px){
+    padding-top: 96px;
+  }
+  @media screen and (max-width: 767px){
+    padding-top: 88px;
+  } 
+}
+
+.nav__menu__link,
+.nav__menu__dropdown{
+  &:after{
+    content: '';
+    display: block;
+    width: 100%;
+    max-width: 0px;
+    height: 1px;
+    background-color: #191919;
+    transition: all 0.2s;
+    @media screen and (max-width: 991px){
+      display: none;
+    }
+  }
+  &:hover:after{
+    max-width: 100%;
+  }
+}
+
+[data-nav-menu-open]{
+  @media screen and (max-width: 991px){
+    display: flex !important;
+  }
+}
+
+.w-nav-button.w--open{
+  background-color: transparent;
+}
+
+.navbar-scrolled{
+  background-color: #F8F5F0;
+}
+
+// we are applying the styles for navbar when:
+// - it has data attribute "data-white-text="true" (menu is not set to have white text)
+// - it does not have a class navbar-scrolled ( menu is scrolled down )
+// - nav-menu does not have attribute data-nav-menu-open (tablet/mobile menu open)
+// - and nav__overlay does not have a class .active-overlay (dropdown open)
+.navbar[data-white-text="true"]:not(.navbar-scrolled):has(.nav-menu:not([data-nav-menu-open])):has(.nav__overlay:not(.active-overlay)) {
+  --color--text-black: #fff;
+  .brand-image {
+    path:not(.main-logo-icon){
+      fill: #fff;
+    }
+  }
+  .navbar-cta{
+    color: #191919;
+    background-color: #fff;
+    border-color: #A3A3A3;
+    .brand-path {
+      fill: #191919 !important;
+    }
+  }
+  .nav__menu__link:after{
+    background-color: #fff;
+  }
+  .button-arrow path{
+    fill: #191919;
+  }
+  .hamburger-line{
+    background-color: #fff;
+  }
+}

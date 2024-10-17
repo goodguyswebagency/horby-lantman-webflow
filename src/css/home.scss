@@ -1,0 +1,8 @@
+@import 'components/marquee';
+@import 'components/marquee-review';
+
+.home-categories__block:hover{
+  .home-categories__block-image{
+    transform: scale(1.1);
+  }  
+}

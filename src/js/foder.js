@@ -1,0 +1,1 @@
+import '../css/foder.scss'

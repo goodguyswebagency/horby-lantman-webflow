@@ -1,0 +1,38 @@
+@import 'components/button';
+
+
+h2{
+  -webkit-hyphens: auto;
+  hyphens: auto;
+    // @media screen and (max-width: 767px){
+    //     -webkit-hyphens: auto;
+    //     hyphens: auto;
+    // }
+}
+
+.form-input.w-select{
+  -moz-appearance:none; /* Firefox */
+  -webkit-appearance:none; /* Safari and Chrome */
+  appearance:none;
+}
+
+.form-input__block:has(.form-input.w-select){
+  position: relative;
+  &:after{
+    position: absolute;
+    right: 1rem;
+    bottom: 0.9rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    content: '';
+    background-image: url('https://cdn.prod.website-files.com/66fbd15db40f5678dd69b9bd/670e4ffce8d02cef5b625c9c_arrow-down.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    transition: all 0.2s;
+  }
+}
+.form-input__block:has(.input-dropdown-open){
+  &:after{
+    transform: rotate(-180deg);
+  }
+}
