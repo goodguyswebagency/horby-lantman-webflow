@@ -6,3 +6,11 @@
     transform: scale(1.1);
   }  
 }
+
+.home-categories__block:has(.home-categories__block:hover){
+  .button {
+    .button-arrow{
+      margin-right: 0px;
+    }
+  }
+}
