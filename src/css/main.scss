@@ -36,3 +36,18 @@ h2{
     transform: rotate(-180deg);
   }
 }
+
+.footer__social-icon{
+  rect, path {
+    transition: all 0.2s;
+  }
+  &:hover{
+    rect{
+      opacity: 1;
+      fill: #000;
+    }
+    path{
+      fill: #fff;
+    }
+  }
+}
