@@ -1,0 +1,18 @@
+
+
+.lan-download__pdf__block-inner{
+  position: relative;
+  &:after{
+    content: '';
+    left: 0px;
+    bottom: -1px;
+    width: 0%;
+    height: 1px;
+    background-color: #000;
+    position: absolute;
+    transition: all 0.2s ease;
+  }
+  &:hover:after{
+    width: 100%;
+  }
+}
