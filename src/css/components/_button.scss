@@ -58,6 +58,35 @@
     
   }
 
+  &[data-background="outline"]{
+    color: var(--color--text-black);
+    border-color: #A3A3A3;
+    background-color: transparent;
+
+    .button-arrow{
+      path{
+        fill: var(--color--text-black);
+      }
+    }
+
+    &:hover{
+      color: var(--color--text-white);
+      .button-arrow{
+        path{
+          fill: var(--color--text-white);
+        }
+      }
+      .button-overlay{
+        opacity: 1;
+        left: -1.1875rem;
+        top: -1.25rem;
+        width: 140%;
+        height: 200%;
+      }
+    }
+    
+  }
+
   &[data-background="green"]{
     background-color: #23A73F;
     border-color: #23A73F;
