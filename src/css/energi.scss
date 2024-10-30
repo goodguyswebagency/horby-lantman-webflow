@@ -1,0 +1,11 @@
+
+.lanspan-pages__block{
+  &:hover{
+     .lanspan-pages__block-image{
+      transform: scale(1.1);
+     } 
+     .button-arrow{
+       margin-right: 0;
+     }
+  }
+}
