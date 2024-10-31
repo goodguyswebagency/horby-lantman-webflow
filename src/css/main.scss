@@ -51,3 +51,21 @@ h2{
     }
   }
 }
+
+.footer-link{
+  &:after{
+    content: '';
+    display: block;
+    width: 100%;
+    max-width: 0px;
+    height: 1px;
+    background-color: #191919;
+    transition: all 0.2s;
+    @media screen and (max-width: 991px){
+      display: none;
+    }
+  }
+  &:hover:after{
+    max-width: 100%;
+  }
+}
