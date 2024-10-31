@@ -53,6 +53,7 @@ h2{
 }
 
 .footer-link{
+  position: relative;
   &:after{
     content: '';
     display: block;
@@ -61,9 +62,9 @@ h2{
     height: 1px;
     background-color: #191919;
     transition: all 0.2s;
-    @media screen and (max-width: 991px){
-      display: none;
-    }
+    position: absolute;
+    bottom: -2px;
+    left: 0px;
   }
   &:hover:after{
     max-width: 100%;
