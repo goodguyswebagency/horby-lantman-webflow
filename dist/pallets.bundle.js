@@ -1,1 +1,74 @@
-(()=>{"use strict";var e={9794:(e,t,n)=>{n.d(t,{A:()=>i});var r=n(1601),o=n.n(r),a=n(6314),c=n.n(a)()(o());c.push([e.id,"",""]);const i=c},6314:e=>{e.exports=function(e){var t=[];return t.toString=function(){return this.map((function(t){var n="",r=void 0!==t[5];return t[4]&&(n+="@supports (".concat(t[4],") {")),t[2]&&(n+="@media ".concat(t[2]," {")),r&&(n+="@layer".concat(t[5].length>0?" ".concat(t[5]):""," {")),n+=e(t),r&&(n+="}"),t[2]&&(n+="}"),t[4]&&(n+="}"),n})).join("")},t.i=function(e,n,r,o,a){"string"==typeof e&&(e=[[null,e,void 0]]);var c={};if(r)for(var i=0;i<this.length;i++){var u=this[i][0];null!=u&&(c[u]=!0)}for(var s=0;s<e.length;s++){var l=[].concat(e[s]);r&&c[l[0]]||(void 0!==a&&(void 0===l[5]||(l[1]="@layer".concat(l[5].length>0?" ".concat(l[5]):""," {").concat(l[1],"}")),l[5]=a),n&&(l[2]?(l[1]="@media ".concat(l[2]," {").concat(l[1],"}"),l[2]=n):l[2]=n),o&&(l[4]?(l[1]="@supports (".concat(l[4],") {").concat(l[1],"}"),l[4]=o):l[4]="".concat(o)),t.push(l))}},t}},1601:e=>{e.exports=function(e){return e[1]}},5072:e=>{var t=[];function n(e){for(var n=-1,r=0;r<t.length;r++)if(t[r].identifier===e){n=r;break}return n}function r(e,r){for(var a={},c=[],i=0;i<e.length;i++){var u=e[i],s=r.base?u[0]+r.base:u[0],l=a[s]||0,d="".concat(s," ").concat(l);a[s]=l+1;var p=n(d),f={css:u[1],media:u[2],sourceMap:u[3],supports:u[4],layer:u[5]};if(-1!==p)t[p].references++,t[p].updater(f);else{var v=o(f,r);r.byIndex=i,t.splice(i,0,{identifier:d,updater:v,references:1})}c.push(d)}return c}function o(e,t){var n=t.domAPI(t);return n.update(e),function(t){if(t){if(t.css===e.css&&t.media===e.media&&t.sourceMap===e.sourceMap&&t.supports===e.supports&&t.layer===e.layer)return;n.update(e=t)}else n.remove()}}e.exports=function(e,o){var a=r(e=e||[],o=o||{});return function(e){e=e||[];for(var c=0;c<a.length;c++){var i=n(a[c]);t[i].references--}for(var u=r(e,o),s=0;s<a.length;s++){var l=n(a[s]);0===t[l].references&&(t[l].updater(),t.splice(l,1))}a=u}}},7659:e=>{var t={};e.exports=function(e,n){var r=function(e){if(void 0===t[e]){var n=document.querySelector(e);if(window.HTMLIFrameElement&&n instanceof window.HTMLIFrameElement)try{n=n.contentDocument.head}catch(e){n=null}t[e]=n}return t[e]}(e);if(!r)throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");r.appendChild(n)}},540:e=>{e.exports=function(e){var t=document.createElement("style");return e.setAttributes(t,e.attributes),e.insert(t,e.options),t}},5056:(e,t,n)=>{e.exports=function(e){var t=n.nc;t&&e.setAttribute("nonce",t)}},7825:e=>{e.exports=function(e){if("undefined"==typeof document)return{update:function(){},remove:function(){}};var t=e.insertStyleElement(e);return{update:function(n){!function(e,t,n){var r="";n.supports&&(r+="@supports (".concat(n.supports,") {")),n.media&&(r+="@media ".concat(n.media," {"));var o=void 0!==n.layer;o&&(r+="@layer".concat(n.layer.length>0?" ".concat(n.layer):""," {")),r+=n.css,o&&(r+="}"),n.media&&(r+="}"),n.supports&&(r+="}");var a=n.sourceMap;a&&"undefined"!=typeof btoa&&(r+="\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(a))))," */")),t.styleTagTransform(r,e,t.options)}(t,e,n)},remove:function(){!function(e){if(null===e.parentNode)return!1;e.parentNode.removeChild(e)}(t)}}}},1113:e=>{e.exports=function(e,t){if(t.styleSheet)t.styleSheet.cssText=e;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(e))}}}},t={};function n(r){var o=t[r];if(void 0!==o)return o.exports;var a=t[r]={id:r,exports:{}};return e[r](a,a.exports,n),a.exports}n.n=e=>{var t=e&&e.__esModule?()=>e.default:()=>e;return n.d(t,{a:t}),t},n.d=(e,t)=>{for(var r in t)n.o(t,r)&&!n.o(e,r)&&Object.defineProperty(e,r,{enumerable:!0,get:t[r]})},n.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),n.nc=void 0;var r=n(5072),o=n.n(r),a=n(7825),c=n.n(a),i=n(7659),u=n.n(i),s=n(5056),l=n.n(s),d=n(540),p=n.n(d),f=n(1113),v=n.n(f),m=n(9794),y={};y.styleTagTransform=v(),y.setAttributes=l(),y.insert=u().bind(null,"head"),y.domAPI=c(),y.insertStyleElement=p(),o()(m.A,y),m.A&&m.A.locals&&m.A.locals,document.getElementById("quantity").addEventListener("input",(function(){const e=parseFloat(this.value),t=parseFloat(document.getElementById("full-price").textContent),n=parseFloat(document.getElementById("low-price").textContent);let r;r=e<52?e*t:e*n;const o=Math.round(.75*r),a=Math.round(.25*r),c=Math.round(r);document.getElementById("price-no-vat").textContent=`${o}`,document.getElementById("vat-price").textContent=`${a}`,document.getElementById("total-price").textContent=`${c}`}));const h=document.querySelector("#offer-submit .button-text"),b=document.querySelector("#offer-submit-button");function g(){h.textContent=b.value}new MutationObserver(g).observe(b,{attributes:!0,attributeFilter:["value"]}),g()})();
+<script>
+        // Product configurations - lätt att ändra priser här
+        const products = {
+            'default': { // 6mm, 16kg - mest såld
+                bagPriceInclVat: 75, // SEK per säck
+                palletPriceInclVat: 3495,
+                bagsPerPallet: 52
+            },
+            '6mm-10kg': {
+                bagPriceInclVat: 49,
+                palletPriceInclVat: 3795,
+                bagsPerPallet: 90
+            },
+            '8mm-16kg': {
+                bagPriceInclVat: 85,
+                palletPriceInclVat: 3695,
+                bagsPerPallet: 52
+            }
+        };
+
+        const VAT_RATE = 0.25; // 25% moms
+
+        const quantityInput = document.getElementById('Kvantitet');
+        const priceNoVatEl = document.getElementById('price-no-vat');
+        const vatPriceEl = document.getElementById('vat-price');
+        const totalPriceEl = document.getElementById('total-price');
+
+        // Lägg till produktval (kan utökas med select)
+        // För nu, default till mest såld
+
+        function calculatePrices(pallets, product = 'default') {
+            const config = products[product];
+            const palletTotalInclVat = config.palletPriceInclVat * pallets;
+            const palletTotalExVat = palletTotalInclVat / (1 + VAT_RATE);
+            const vatTotal = palletTotalExVat * VAT_RATE;
+            const totalBags = config.bagsPerPallet * pallets;
+            const perBagExVat = (config.bagPriceInclVat / (1 + VAT_RATE)).toFixed(2);
+
+            priceNoVatEl.textContent = palletTotalExVat.toLocaleString() + ' SEK (' + perBagExVat + ' SEK/säck ex.moms)';
+            vatPriceEl.textContent = vatTotal.toLocaleString() + ' SEK';
+            totalPriceEl.textContent = palletTotalInclVat.toLocaleString() + ' SEK (' + config.bagPriceInclVat.toLocaleString() + ' SEK/säck incl.moms, ' + totalBags + ' säckar)';
+
+            // Visa full/low price om behövs (från bilder?)
+            document.getElementById('full-price').textContent = config.bagPriceInclVat;
+            document.getElementById('low-price').textContent = (config.bagPriceInclVat * 0.9987).toFixed(1); // approx från bilder
+        }
+
+        // Initial beräkning
+        calculatePrices(1);
+
+        // Uppdatera vid ändring
+        quantityInput.addEventListener('input', (e) => {
+            calculatePrices(parseInt(e.target.value) || 0);
+        });
+
+        // Form submit - för nu, logga/console
+        document.getElementById('pellets-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            console.log('Beställning:', Object.fromEntries(formData));
+            alert('Beställning skickad! Vi kontaktar dig snart. (Demo)');
+        });
+
+        // För att lägga till produktselect (valfritt utöka)
+        // const productSelect = document.createElement('select');
+        // Object.keys(products).forEach(key => {
+        //     const opt = document.createElement('option');
+        //     opt.value = key;
+        //     opt.text = key.replace('mm-', '').replace('-', ' ');
+        //     productSelect.appendChild(opt);
+        // });
+        // quantityInput.parentNode.appendChild(productSelect);
+        // productSelect.addEventListener('change', (e) => calculatePrices(parseInt(quantityInput.value), e.target.value));
+    </script>
