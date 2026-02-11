@@ -1,6 +1,31 @@
-// Puni, čitljiv JS kod - stavi u <div class="w-embed w-script">
-(() => {
+// pallets.bundle.js - PUNI, Webflow-safe kod (kopiraj u GitHub, build/minify)
+(function() {
   "use strict";
+
+  // ========================================
+  // Webflow safe loader - čeka DOM + Webflow
+  // ========================================
+  function waitForWebflow(callback, maxRetries = 50) {
+    let retries = 0;
+    function check() {
+      retries++;
+      const webflowReady = window.Webflow && window.Webflow.require && document.readyState === 'complete';
+      const formExists = document.getElementById("Kvantitet") !== null;
+      
+      if (webflowReady && formExists) {
+        console.log("✅ Pellet calculator: Webflow + form ready!");
+        callback();
+        return;
+      }
+      
+      if (retries < maxRetries) {
+        setTimeout(check, 200);
+      } else {
+        console.warn("⚠️ Pellet calculator: Timeout, form not found");
+      }
+    }
+    check();
+  }
 
   // ========================================
   // KONFIGURACIJA - MENJAJ CENE OVDE
@@ -9,8 +34,8 @@
     types: {
       scandinavian: {
         name: "Scandinavian 6mm",
-        sackPalletPriceInclVat: 3495,  // SEK po pall sa säck-ama
-        bulkPalletPriceInclVat: 3895,  // SEK po pall rasuto
+        sackPalletPriceInclVat: 3495,
+        bulkPalletPriceInclVat: 3895,
         bagsPerPallet: 52,
         kgPerPallet: 832  // 16kg * 52
       },
@@ -30,162 +55,160 @@
       }
     },
     defaultType: "scandinavian",
-    fullSackPriceInclVat: 79,     // <52 säck-ova
-    lowSackPriceInclVat: 74.90,   // >=52 säck-ova
+    fullSackPriceInclVat: 79,     
+    lowSackPriceInclVat: 74.90,   
     palletsForFreeShipping: 4,
-    hornyPostcodesRegex: /^283|284/,  // Hörby poštanski brojevi
+    hornyPostcodesRegex: /^283|284/,
     shippingRadius: "3 mil",
-    vatMultiplier: 1.25  // 25% moms
+    vatMultiplier: 1.25
   };
 
   // ========================================
-  // ELEMENTI IZ WEbfLOW DOM-a
+  // INIT FUNKCIJA (pokreće kad je sve ready)
   // ========================================
-  const elements = {
-    quantityInput: document.getElementById("Kvantitet"),
-    priceNoVat: document.getElementById("price-no-vat"),
-    vatPrice: document.getElementById("vat-price"),
-    totalPrice: document.getElementById("total-price"),
-    fullPriceHeading: document.getElementById("full-price"),
-    lowPriceHeading: document.getElementById("low-price"),
-    form: document.getElementById("trapellets-form-pelletsbestallning"),
-    postnummerInput: document.getElementById("Postnummer"),
-    pelletTypeSelect: document.getElementById("pellet-type")
-  };
+  function initPelletCalculator() {
+    const elements = {
+      quantityInput: document.getElementById("Kvantitet"),
+      priceNoVat: document.getElementById("price-no-vat"),
+      vatPrice: document.getElementById("vat-price"),
+      totalPrice: document.getElementById("total-price"),
+      fullPriceHeading: document.getElementById("full-price"),
+      lowPriceHeading: document.getElementById("low-price"),
+      form: document.getElementById("trapellets-form-pelletsbestallning"),
+      postnummerInput: document.getElementById("Postnummer"),
+      pelletTypeSelect: document.getElementById("pellet-type")
+    };
 
-  // ========================================
-  // FUNKCIJE
-  // ========================================
-
-  // Reset prikaza na 0
-  function resetDisplay() {
-    if (elements.priceNoVat) elements.priceNoVat.textContent = "0 SEK";
-    if (elements.vatPrice) elements.vatPrice.textContent = "0 SEK";
-    if (elements.totalPrice) elements.totalPrice.textContent = "0 SEK";
-    if (elements.fullPriceHeading) elements.fullPriceHeading.classList.add("hidden");
-    if (elements.lowPriceHeading) elements.lowPriceHeading.classList.add("hidden");
-  }
-
-  // Proveri da li je frakt gratis (po postnr + količini)
-  function checkFreeShipping(postnummer, pallets) {
-    const cleanPostnr = postnummer.replace(/\s/g, "");
-    if (pallets >= PELLET_CONFIG.palletsForFreeShipping && PELLET_CONFIG.hornyPostcodesRegex.test(cleanPostnr)) {
-      return `✅ Frakt GRATIS (unutar ${PELLET_CONFIG.shippingRadius} od Hörby)`;
-    }
-    return "Frakt dogovoriti separerat (varijabilno)";
-  }
-
-  // Glavna kalkulacija
-  function calculatePrices() {
-    const quantity = parseInt(elements.quantityInput.value) || 0;
-    if (quantity === 0) {
-      resetDisplay();
+    // Safety check
+    if (!elements.quantityInput) {
+      console.error("❌ Pellet form elements not found");
       return;
     }
 
-    // Dohvati tip i delivery mode
-    const pelletType = elements.pelletTypeSelect ? elements.pelletTypeSelect.value : PELLET_CONFIG.defaultType;
-    const config = PELLET_CONFIG.types[pelletType];
-    const deliveryType = document.querySelector('input[name="delivery-type"]:checked')?.value || "sack";
-    const postnummer = elements.postnummerInput ? elements.postnummerInput.value : "";
+    console.log("🚀 Initializing pellet calculator...");
 
-    let totalInclVat = 0;
-    let totalExVat = 0;
-    let vatAmount = 0;
-    let unitCount = 0;
-    let unitText = "";
-    let isLowPrice = false;
-    let pallets = 0;
+    // ========================================
+    // FUNKCIJE
+    // ========================================
+    function resetDisplay() {
+      if (elements.priceNoVat) elements.priceNoVat.textContent = "0 SEK";
+      if (elements.vatPrice) elements.vatPrice.textContent = "0 SEK";
+      if (elements.totalPrice) elements.totalPrice.textContent = "0 SEK";
+      if (elements.fullPriceHeading) elements.fullPriceHeading.classList.add("hidden");
+      if (elements.lowPriceHeading) elements.lowPriceHeading.classList.add("hidden");
+    }
 
-    if (deliveryType === "sack") {
-      // SÄCK MODE: po vrećama, sa volume popustom
-      let sacks;
-      if (quantity < PELLET_CONFIG.types[pelletType].bagsPerPallet) {
-        // <1 pall: full cena po säck
-        sacks = quantity;
-        totalInclVat = PELLET_CONFIG.fullSackPriceInclVat * sacks;
-      } else {
-        // >=1 pall: low cena + pallet popust
-        pallets = Math.ceil(quantity / config.bagsPerPallet);
-        totalInclVat = config.sackPalletPriceInclVat * pallets;
-        sacks = config.bagsPerPallet * pallets;
-        isLowPrice = true;
+    function checkFreeShipping(postnummer, pallets) {
+      const cleanPostnr = postnummer.replace(/\s/g, "");
+      if (pallets >= PELLET_CONFIG.palletsForFreeShipping && PELLET_CONFIG.hornyPostcodesRegex.test(cleanPostnr)) {
+        return `✅ Frakt GRATIS (unutar ${PELLET_CONFIG.shippingRadius} od Hörby)`;
       }
-      unitCount = sacks;
-      unitText = "säckar";
-
-    } else {
-      // BULK MODE: rasuto po pall-ovima
-      pallets = quantity;
-      totalInclVat = config.bulkPalletPriceInclVat * pallets;
-      unitCount = config.kgPerPallet * pallets;
-      unitText = "kg (bulk)";
+      return "Frakt dogovoriti separerat";
     }
 
-    // Moms kalkulacija
-    totalExVat = Math.round(totalInclVat / PELLET_CONFIG.vatMultiplier);
-    vatAmount = totalInclVat - totalExVat;
+    function calculatePrices() {
+      const quantity = parseInt(elements.quantityInput.value) || 0;
+      if (quantity === 0) {
+        resetDisplay();
+        return;
+      }
 
-    // Ažuriraj display
-    if (elements.priceNoVat) {
-      elements.priceNoVat.textContent = `${totalExVat.toLocaleString()} SEK`;
-    }
-    if (elements.vatPrice) {
-      elements.vatPrice.textContent = `${vatAmount.toLocaleString()} SEK`;
-    }
-    if (elements.totalPrice) {
-      const pricePerUnit = Math.round(totalInclVat / unitCount);
-      const shippingNote = checkFreeShipping(postnummer, pallets);
-      elements.totalPrice.textContent = `${totalInclVat.toLocaleString()} SEK (${pricePerUnit} SEK/${unitText.split(" ")[0]}, ${unitCount.toLocaleString()} ${unitText}) | ${shippingNote}`;
+      const pelletType = elements.pelletTypeSelect ? elements.pelletTypeSelect.value : PELLET_CONFIG.defaultType;
+      const config = PELLET_CONFIG.types[pelletType];
+      const deliveryType = document.querySelector('input[name="delivery-type"]:checked')?.value || "sack";
+      const postnummer = elements.postnummerInput ? elements.postnummerInput.value : "";
+
+      let totalInclVat = 0;
+      let totalExVat = 0;
+      let vatAmount = 0;
+      let unitCount = 0;
+      let unitText = "";
+      let isLowPrice = false;
+      let pallets = 0;
+
+      if (deliveryType === "sack") {
+        let sacks;
+        if (quantity < config.bagsPerPallet) {
+          sacks = quantity;
+          totalInclVat = PELLET_CONFIG.fullSackPriceInclVat * sacks;
+        } else {
+          pallets = Math.ceil(quantity / config.bagsPerPallet);
+          totalInclVat = config.sackPalletPriceInclVat * pallets;
+          const sacks = config.bagsPerPallet * pallets;
+          unitCount = sacks;
+          unitText = "säckar";
+          isLowPrice = true;
+        }
+        unitCount = sacks || quantity;
+        unitText = unitText || "säckar";
+
+      } else {  // bulk
+        pallets = quantity;
+        totalInclVat = config.bulkPalletPriceInclVat * pallets;
+        unitCount = config.kgPerPallet * pallets;
+        unitText = "kg (bulk)";
+      }
+
+      totalExVat = Math.round(totalInclVat / PELLET_CONFIG.vatMultiplier);
+      vatAmount = totalInclVat - totalExVat;
+
+      if (elements.priceNoVat) {
+        elements.priceNoVat.textContent = `${totalExVat.toLocaleString()} SEK`;
+      }
+      if (elements.vatPrice) {
+        elements.vatPrice.textContent = `${vatAmount.toLocaleString()} SEK`;
+      }
+      if (elements.totalPrice) {
+        const pricePerUnit = Math.round(totalInclVat / unitCount);
+        const shippingNote = checkFreeShipping(postnummer, pallets);
+        elements.totalPrice.textContent = `${totalInclVat.toLocaleString()} SEK (${pricePerUnit} SEK/${unitText.split(" ")[0]}, ${unitCount.toLocaleString()} ${unitText}) | ${shippingNote}`;
+      }
+
+      if (elements.fullPriceHeading) {
+        elements.fullPriceHeading.textContent = PELLET_CONFIG.fullSackPriceInclVat;
+        elements.fullPriceHeading.classList.toggle("hidden", isLowPrice);
+      }
+      if (elements.lowPriceHeading) {
+        elements.lowPriceHeading.textContent = PELLET_CONFIG.lowSackPriceInclVat;
+        elements.lowPriceHeading.classList.toggle("hidden", !isLowPrice);
+      }
     }
 
-    // Heading cene (iz slika)
-    if (elements.fullPriceHeading) {
-      elements.fullPriceHeading.textContent = PELLET_CONFIG.fullSackPriceInclVat;
-      elements.fullPriceHeading.classList.toggle("hidden", isLowPrice);
-    }
-    if (elements.lowPriceHeading) {
-      elements.lowPriceHeading.textContent = PELLET_CONFIG.lowSackPriceInclVat;
-      elements.lowPriceHeading.classList.toggle("hidden", !isLowPrice);
-    }
-  }
-
-  // ========================================
-  // EVENT LISTENERI
-  // ========================================
-  if (elements.quantityInput) {
+    // ========================================
+    // EVENTS
+    // ========================================
     elements.quantityInput.addEventListener("input", calculatePrices);
-  }
-  if (elements.pelletTypeSelect) {
-    elements.pelletTypeSelect.addEventListener("change", calculatePrices);
-  }
-  // Radio buttons za delivery type
-  document.querySelectorAll('input[name="delivery-type"]').forEach(radio => {
-    radio.addEventListener("change", calculatePrices);
-  });
-  // Postnummer promena
-  if (elements.postnummerInput) {
-    elements.postnummerInput.addEventListener("input", calculatePrices);
-  }
-
-  // Form submit (demo/prevent default)
-  if (elements.form) {
-    elements.form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const formData = new FormData(elements.form);
-      const data = Object.fromEntries(formData);
-      console.log("🛒 Pellets beställning:", data);
-      console.log("💰 Pris kalkulacija spremna za email");
-      alert(`Tack för din förfrågan!\nKostnadsförslag för ${data.Kvantitet} ${data["delivery-type"] === "bulk" ? "pallar bulk" : "säckar"} skickat till ${data.Mejladress}`);
+    if (elements.pelletTypeSelect) {
+      elements.pelletTypeSelect.addEventListener("change", calculatePrices);
+    }
+    document.querySelectorAll('input[name="delivery-type"]').forEach(radio => {
+      radio.addEventListener("change", calculatePrices);
     });
+    if (elements.postnummerInput) {
+      elements.postnummerInput.addEventListener("input", calculatePrices);
+    }
+    if (elements.form) {
+      elements.form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = new FormData(elements.form);
+        const data = Object.fromEntries(formData);
+        console.table(data);
+        alert(`Tack! Kostnadsförslag skickat till ${data.Mejladress}`);
+      });
+    }
+
+    // Initial kalkulacija
+    elements.quantityInput.value = "1";
+    calculatePrices();
   }
 
   // ========================================
-  // INIT - Pokreni sa default vrednostima
+  // AUTO-START
   // ========================================
-  if (elements.quantityInput) {
-    elements.quantityInput.value = "1";  // Default 1 pall/säck
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => waitForWebflow(initPelletCalculator));
+  } else {
+    waitForWebflow(initPelletCalculator);
   }
-  calculatePrices();
 
 })();
