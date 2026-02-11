@@ -1,5 +1,4 @@
-<script>
-        // Product configurations - lätt att ändra priser här
+// Product configurations - lätt att ändra priser här
         const products = {
             'default': { // 6mm, 16kg - mest såld
                 bagPriceInclVat: 75, // SEK per säck
@@ -71,4 +70,3 @@
         // });
         // quantityInput.parentNode.appendChild(productSelect);
         // productSelect.addEventListener('change', (e) => calculatePrices(parseInt(quantityInput.value), e.target.value));
-    </script>
