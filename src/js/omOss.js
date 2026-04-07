@@ -69,7 +69,7 @@ function updateYearDiv(){
         div.style.display = 'none';
       }
     });
-  }, "200");
+  }, 200);
 }
 
 // Initialize Swiper on load
@@ -87,6 +87,8 @@ window.addEventListener('resize', initHistorySwiper);
 // adding also pagination and logic for selecting certain category only
 ///////////////////////////////////
 
+
+
 const itemsPerPage = 12;  // Set how many items you want per page
 let currentPage = 1;
 let currentCategory = '';  // Keep track of the active category
@@ -97,6 +99,16 @@ const buttonFilters = document.querySelectorAll('.button-filter');
 
 // Get the order of categories from the button-filter elements inside .oss-people__categories__wrapper
 const categoryOrder = Array.from(document.querySelectorAll('.oss-people__categories__wrapper .w-dyn-item .button-filter')).map(button => button.innerText.toLowerCase());
+
+// scroll anchor
+function scrollToGrid() {
+  const grid = document.querySelector('.oss-people__grid');
+  if (grid) {
+    const offset = 100;
+    const top = grid.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
 
 // Sort the people array by category order (based on button-filter) and then by order number (lowest to highest)
 function sortPeopleArray(arr) {
@@ -183,6 +195,7 @@ function updatePaginationControls(totalPages) {
         pageButton.addEventListener('click', function () {
             currentPage = i;
             showPage(currentPage, currentCategory);
+            scrollToGrid();
         });
 
         newPaginationContainer.appendChild(pageButton);
@@ -199,7 +212,9 @@ buttonFilters.forEach(button => {
             // If the clicked button is already active, reset all filters
             buttonFilters.forEach(btn => btn.classList.remove('active-category-filter'));
             currentCategory = '';  // Reset the active category filter
+            currentPage = 1;
             showPage(1);  // Show all people
+            scrollToGrid();
         } else {
             // If it's a new category, remove 'active-category-filter' class from all buttons
             buttonFilters.forEach(btn => btn.classList.remove('active-category-filter'));
@@ -212,6 +227,7 @@ buttonFilters.forEach(button => {
             // Show the first page of the filtered list
             currentPage = 1;
             showPage(currentPage, currentCategory);
+            scrollToGrid();
         }
     });
 });
@@ -362,5 +378,3 @@ showPage(currentPage);
 
 // // Initial page load
 // showPage(currentPage);
-
-
